@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>basic title</title>
+	<meta charset="utf-8">
+	<script
+			  src="https://code.jquery.com/jquery-3.4.1.min.js"
+			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			  crossorigin="anonymous">
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="title_wrap">
+		</div>
+		<div class="content_wrap">
+			<div class="content_title">
+			</div>
+			<div class="content">
+			</div>
+			<div class="form_wrap">
+			</div>
+		</div>
+	</div>
+</body>
+
+<style type="text/css">
+
+	body {
+		box-sizing: border-box;
+	}
+	.container {
+		max-width: 600px;
+		margin: auto;
+	}
+	.title_wrap {
+		display: flex;
+		justify-content: space-around;
+		text-align: center;
+		vertical-align: center;
+	}
+	.title {
+		cursor: pointer;
+		color: black;
+	}
+	.title_active {
+		color: red;
+	}
+	.form_wrap {
+		display: flex;
+		justify-content: space-around;
+		text-align: center;
+		vertical-align: center;
+	}
+	.content_title {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		height: 50px;
+		border: 2px dotted pink;
+	}
+	.content_element {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		height: 50px;
+		border: 2px dotted pink;
+		margin-top: 10px;
+		cursor: pointer;
+	}
+	.content_element_alone {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		height: 50px;
+		border: 2px dotted pink;
+		margin-top: 10px;
+	}
+	.content_element_button_delete {
+		height: 20px;
+		width: 2%;
+		background-color: blue;
+		cursor: pointer;
+	}
+</style>
+
+
+
+<script type="text/javascript">
+
+	function clearItem(arg) {
+		$(arg).empty();
+	}
+	function makeTitle () { 
+		$("<h1/>", {
+			"id": "readers",
+			"class": "title"
+		}).text("READERS").appendTo(".title_wrap");
+		$("<h1/>", {
+			"id": "books",
+			"class": "title"
+		}).text("BOOKS").appendTo(".title_wrap");
+		$("<h1/>", {
+			"id": "authors",
+			"class": "title"
+		}).text("AUTHORS").appendTo(".title_wrap");
+	}
+	function makeReadersTitle () {
+		$("<div/>").text("name").appendTo(".content_title");
+		$("<div/>").text("surname").appendTo(".content_title");
+		$("<div/>").text("date_of_birth").appendTo(".content_title");
+		$("<div/>").text("uuid").appendTo(".content_title");
+	};
+	function makeAuthorsTitle () {
+		$("<div/>").text("name").appendTo(".content_title");
+		$("<div/>").text("suasdas").appendTo(".content_title");
+		$("<div/>").text("daasdasirth").appendTo(".content_title");
+		$("<div/>").text("usadasd").appendTo(".content_title");
+	};
+	function makeBooksTitle () {
+		$("<div/>").text("namasdasde").appendTo(".content_title");
+		$("<div/>").text("sasdasdme").appendTo(".content_title");
+		$("<div/>").text("dasdasdrth").appendTo(".content_title");
+		$("<div/>").text("uuasdasdid").appendTo(".content_title");
+	};
+	function readersLoad () {
+		clearItem(".title_wrap")
+		clearItem(".content_title")
+		clearItem(".content");
+		clearItem(".form_wrap");
+		makeTitle();
+		makeReadersTitle();
+		$.get('http://127.0.0.1:8000/readers/', function(data) {
+	  		console.log("loaded readers" + data);
+	  		$.each(data, function(key, val) {
+	  			var items = [];
+	  			items.push("<div id='" + key +"'>" + val.name + "</div>");
+	  			items.push("<div id='" + key +"'>" + val.surname + "</div>");
+	  			items.push("<div id='" + key +"'>" + val.date_of_birth + "</div>");
+	  			items.push("<div id='uuidclass'>" + val.uuid + "</div>");	
+		  		$("<div/>", {
+		  			"class": "content_element",
+		  			"id": "content_element_" + key,
+		  			html: items.join("")
+		  		}).appendTo(".content");
+		  	});
+	  	});
+	  	makePostForm();
+	}
+	function authorsLoad () {
+		clearItem(".title_wrap")
+		clearItem(".content_title")
+		clearItem(".content");
+		clearItem(".form_wrap");
+		makeTitle();
+		makeAuthorsTitle();
+		$.get('http://127.0.0.1:8000/authors/', function(data) {
+	  		console.log("loaded authors" + data);
+	  		$.each(data, function(key, val) {
+	  			var items = [];
+	  			items.push("<div id='" + key +"'>" + val.name + "</div>");
+	  			items.push("<div id='" + key +"'>" + val.surname + "</div>");
+	  			items.push("<div id='" + key +"'>" + val.date_of_birth + "</div>");
+	  			items.push("<div id='" + key +"'>" + val.uuid + "</div>");		
+		  		$("<div/>", {
+		  			"class": "content_element",
+		  			html: items.join("")
+		  		}).appendTo(".content");
+		  	});
+	  	});
+	  	makePostForm();
+	}
+	function booksLoad () {
+		clearItem(".title_wrap")
+		clearItem(".content_title")
+		clearItem(".content");
+		clearItem(".form_wrap");
+		makeTitle();
+		makeBooksTitle();
+		$.get('http://127.0.0.1:8000/books/', function(data) {
+	  		console.log("loaded books" + data);
+	  		$.each(data, function(key, val) {
+	  			var items = [];
+	  			items.push("<div id='" + key +"'>" + val.author.name + "</div>");
+	  			items.push("<div id='" + key +"'>" + val.author.surname + "</div>");
+	  			items.push("<div id='" + key +"'>" + val.title + "</div>");
+	  			items.push("<div id='" + key +"'>" + val.uuid + "</div>");
+		  		$("<div/>", {
+		  			"class": "content_element",
+		  			html: items.join("")
+		  		}).appendTo(".content");
+		  	});
+	  	});
+	  	makePostForm();
+	}
+	function uuidLoad (tracker) {
+		clearItem(".content");
+		clearItem(".form_wrap");
+		$.get('http://127.0.0.1:8000/readers/' + tracker, function(data) {
+	  		console.log("uuid data - " + data + "tracker - " + tracker);
+  			var items = [];
+  			items.push("<div>" + data.name + "</div>");
+  			items.push("<div>" + data.surname + "</div>");
+  			items.push("<div>" + data.date_of_birth + "</div>");
+  			items.push("<div id='uuidclass'>" + data.uuid + "</div>");	
+	  		$("<div/>", {
+	  			"class": "content_element_alone",
+	  			html: items.join("")
+	  		}).appendTo(".content");
+	  		$("<div/>", {
+	  			"class": "content_element_button_delete",
+	  		}).appendTo(".content_element_alone");
+	  	});
+	  	makePatchForm();		
+	}
+	function makePatchForm () {
+		clearItem("#form_wrap");
+		$("<form/>", {
+			"id": "patch_form",
+			"action": "",
+			"method": ""
+		}).appendTo(".form_wrap");
+		$("<input/>", {
+			"type": "text",
+			"name": "name",
+			"onfocus": "this.value=''",
+			"value": "user name"
+		}).appendTo("#patch_form");
+		$("<input/>", {
+			"type": "text",
+			"name": "surname",
+			"onfocus": "this.value=''",
+			"value": "user surname"
+		}).appendTo("#patch_form");
+		$("<input/>", {
+			"type": "text",
+			"name": "date_of_birth",
+			"onfocus": "this.value=''",
+			"value": "user birth date"
+		}).appendTo("#patch_form");
+		$("<button/>", {
+			"id": "submit_patch",
+			"type": "button",
+			"name": "submit",
+			"value": "submit"
+		}).text("edit").appendTo("#patch_form");
+	}
+	function makePostForm () {
+		clearItem("#form_wrap");
+		$("<form/>", {
+			"id": "post_form",
+			"action": "POST",
+			"method": ""
+		}).appendTo(".form_wrap");
+		$("<input/>", {
+			"type": "text",
+			"name": "name",
+			"onfocus": "this.value=''",
+			"value": "user name"
+		}).appendTo("#post_form");
+		$("<input/>", {
+			"type": "text",
+			"name": "surname",
+			"onfocus": "this.value=''",
+			"value": "user surname"
+		}).appendTo("#post_form");
+		$("<input/>", {
+			"type": "text",
+			"name": "date_of_birth",
+			"onfocus": "this.value=''",
+			"value": "user birth date"
+		}).appendTo("#post_form");
+		$("<button/>", {
+			"id": "submit_post",
+			"type": "button",
+			"name": "submit",
+			"value": "submit"
+		}).text("add user").appendTo("#post_form");
+	}
+	function patchReaders (idtracker) {
+		$.ajax({
+			url: 'http://127.0.0.1:8000/readers/' + idtracker + '/',
+			method: "PATCH",
+			dataType: 'json',
+			data: $("#patch_form").serialize(),
+			success: function(result) {
+				console.log(result + "addet");
+			},
+			error: function(xhr, resp, text) {
+				console.log(xhr, resp, text);
+			}
+		});
+	}
+	function submitReaders () {
+		$.ajax({
+			url: 'http://127.0.0.1:8000/readers/',
+			method: "POST",
+			dataType: 'json',
+			data: $("#post_form").serialize(),
+			success: function(result) {
+				console.log(result + "addet");
+			},
+			error: function(xhr, resp, text) {
+				console.log(xhr, resp, text);
+			}
+		});
+	}
+	function deleteReaders (idtracker) {
+		$.ajax({
+			url: 'http://127.0.0.1:8000/readers/' + idtracker +'/',
+			method: "DELETE",
+			success: function(result) {
+				console.log(result + "addet");
+			},
+			error: function(xhr, resp, text) {
+				console.log(xhr, resp, text);
+			}
+		});
+	}
+	/* event handlers */
+
+	$(document).on('click','.content_element', function() {
+		var uuidAlone = $(this).find("#uuidclass").text();
+		uuidLoad(uuidAlone);
+	});
+	$(document).on('click', '#submit_post', function() {
+		submitReaders();
+		readersLoad();
+	});
+	$(document).on('click','#submit_patch', function() {
+		var uuidAlone = $(".content_element_alone").find("#uuidclass").text();
+		patchReaders(uuidAlone);
+		clearItem(".content_element_alone");
+		uuidLoad(uuidAlone);
+	});
+	$(document).on('click', '.content_element_button_delete', function() {
+		var uuidBye = $(".content_element_alone").find("#uuidclass").text();
+		deleteReaders(uuidBye);
+		readersLoad();
+	});
+	$(document).on('click', '#readers', function() {
+		readersLoad();
+		$("#readers").addClass("title_active");
+		$("#authors").removeClass("title_active");
+		$("#books").removeClass("title_active");
+	});
+	$(document).on('click', '#authors', function() {
+		authorsLoad();
+		$("#readers").removeClass("title_active");
+		$("#authors").addClass("title_active");
+		$("#books").removeClass("title_active");
+	});
+	$(document).on('click', '#books', function() {
+		booksLoad();
+		$("#readers").removeClass("title_active");
+		$("#authors").removeClass("title_active");
+		$("#books").addClass("title_active");
+	});
+
+	/* page ready func */
+
+	$(document).ready(function() {
+		makeTitle();
+	});
+
+
+</script>
+
+
+</html>
+
+
+
+
+
+
+
+
+
