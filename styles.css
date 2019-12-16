@@ -1,0 +1,131 @@
+body {
+	box-sizing: border-box;
+}
+.container {
+	max-width: 1000px;
+	margin: auto;
+}
+.title_wrap {
+	display: flex;
+	justify-content: space-around;
+	text-align: center;
+	vertical-align: center;
+}
+.title {
+	cursor: pointer;
+	color: grey;
+}
+.title:hover {
+	color: #FF6E9E;
+}
+.title_active {
+	color: #FF6E9E;
+}
+.form_wrap {
+	margin: auto;
+	align-items: center;
+	text-align: center;
+	width: 100%;
+}
+.content_title {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	height: 50px;
+	/* border: 2px dotted pink;*/
+	text-transform: uppercase;
+	text-align: center;
+	vertical-align: center;
+}
+.contetnt_title div {
+	width: 20%;
+	margin: auto;
+}
+.content_element {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	height: 50px;
+	background-color: #FFF0F5;
+	box-shadow: 0 0 3px rgba(0,0,0,0.1);
+	margin-top: 10px;
+	cursor: pointer;
+	text-align: center;
+	vertical-align: center;
+}
+.content_element:hover {
+	background-color: #FCDEE8;
+}
+.content_element div {
+	width: 20%;
+	margin: auto;
+}
+.content_element_alone {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	height: 50px;
+	background-color: #FFF0F5;
+	box-shadow: 0 0 3px rgba(0,0,0,0.2);
+	margin-top: 10px;
+	text-align: center;
+	vertical-align: middle;
+}
+.content_element_alone:hover {
+	background-color: #FCDEE8;
+}
+.content_element_alone div {
+	width: 20%;
+	margin: auto;
+}
+.content_element_passive {
+	margin: auto;
+}
+.content_element_button_delete_readers, .content_element_button_delete_books, .content_element_button_delete_authors {
+	height: 30px;
+	width: 30px;
+	border-radius: 2px;
+	background-color: #75ffb3;
+	box-shadow: 0 0 3px rgba(0,0,0,0.2);
+	cursor: pointer;
+	color: white;
+}
+.content_element_button_delete_readers:hover {
+	background-color: #46c97f;
+}
+.content_element_button_delete_readers:onclick {
+	padding-top: 3px;
+}
+.bookdetails {
+	text-align: center;
+	vertical-align: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	color: grey;
+}
+label {
+	color: red;
+}
+form {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+}
+input {
+	float: bottom;
+	width: 100px;
+	height: 30px;
+	margin-top: 10px;
+}
+button {
+	width: 80px;
+	height: 30px;
+	margin-top: 10px;
+	cursor: pointer;
+}
