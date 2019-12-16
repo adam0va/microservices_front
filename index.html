@@ -3,11 +3,11 @@
 <head>
 	<title>basic title</title>
 	<meta charset="utf-8">
-	<script
-			  src="https://code.jquery.com/jquery-3.4.1.min.js"
-			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-			  crossorigin="anonymous">
-	</script>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.js"></script>
+	<script type="text/javascript" src="script.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+
 </head>
 <body>
 	<div class="container">
@@ -50,14 +50,10 @@
 		color: #FF6E9E;
 	}
 	.form_wrap {
-		display: flex;
-		justify-content: space-around;
-		text-align: center;
-		vertical-align: center;
-		width: 60%;
 		margin: auto;
-		margin-top: 10px;
-		margin-bottom: 10px;
+		align-items: center;
+		text-align: center;
+		width: 100%;
 	}
 	.content_title {
 		display: flex;
@@ -65,8 +61,14 @@
 		justify-content: space-around;
 		align-items: center;
 		height: 50px;
-		border: 2px dotted pink;
+		/* border: 2px dotted pink;*/
 		text-transform: uppercase;
+		text-align: center;
+		vertical-align: center;
+	}
+	.contetnt_title div {
+		width: 20%;
+		margin: auto;
 	}
 	.content_element {
 		display: flex;
@@ -78,9 +80,15 @@
 		box-shadow: 0 0 3px rgba(0,0,0,0.1);
 		margin-top: 10px;
 		cursor: pointer;
+		text-align: center;
+		vertical-align: center;
 	}
 	.content_element:hover {
 		background-color: #FCDEE8;
+	}
+	.content_element div {
+		width: 20%;
+		margin: auto;
 	}
 	.content_element_alone {
 		display: flex;
@@ -91,36 +99,62 @@
 		background-color: #FFF0F5;
 		box-shadow: 0 0 3px rgba(0,0,0,0.2);
 		margin-top: 10px;
+		text-align: center;
+		vertical-align: middle;
 	}
 	.content_element_alone:hover {
 		background-color: #FCDEE8;
 	}
+	.content_element_alone div {
+		width: 20%;
+		margin: auto;
+	}
 	.content_element_passive {
-		float: left;
-		color: grey;
-		text-align: center;
-		vertical-align: center;
 		margin: auto;
 	}
 	.content_element_button_delete_readers, .content_element_button_delete_books, .content_element_button_delete_authors {
-		display: inline-block;
 		height: 30px;
 		width: 30px;
-		border-radius: 3px;
-		width: 2%;
-		text-align: center;
-		vertical-align: center;
-		background-color: #fd380e;
+		border-radius: 2px;
+		background-color: #75ffb3;
+		box-shadow: 0 0 3px rgba(0,0,0,0.2);
 		cursor: pointer;
 		color: white;
 	}
+	.content_element_button_delete_readers:hover {
+		background-color: #46c97f;
+	}
+	.content_element_button_delete_readers:onclick {
+		padding-top: 3px;
+	}
 	.bookdetails {
+		text-align: center;
+		vertical-align: center;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
 		align-items: center;
+		color: grey;
+	}
+	label {
+		color: red;
+	}
+	form {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+	}
+	input {
+		float: bottom;
+		width: 100px;
+		height: 30px;
+		margin-top: 10px;
 	}
 	button {
+		width: 80px;
+		height: 30px;
+		margin-top: 10px;
 		cursor: pointer;
 	}
 </style>
@@ -168,7 +202,11 @@
 		$("<div/>").text("book uuid").appendTo(".content_title");
 		$("<div/>").text("status").appendTo(".content_title");
 	};
-
+	function makeBooksTitleAlone () {
+		$("<div/>").text("title").appendTo(".content_title");
+		$("<div/>").text("book uuid").appendTo(".content_title");
+		$("<div/>").text("status").appendTo(".content_title");
+	}
 
 	function readersLoad () {
 		clearItem(".title_wrap")
@@ -243,7 +281,11 @@
 		  			items.push("<div id='" + key +"'>" + val.author.surname + "</div>");
   				}
 	  			items.push("<div id='uuidclass'>" + val.uuid + "</div>");
-	  			items.push("<div id='" + key +"'>" + val.title + "</div>");
+				if (val.reader_uuid == null) {
+					items.push("<div>avaliable</div>");
+				} else {
+					items.push("<div>not avaliable</div>");
+				}
 		  		$("<div/>", {
 		  			"class": "content_element",
 		  			"id": "element_books",
@@ -258,7 +300,7 @@
 	function uuidreadersLoad (tracker) {
 		clearItem(".content");
 		clearItem(".form_wrap");
-		$.get('http://127.0.0.1:8000/readers/' + tracker, function(data) {
+		$.get('http://127.0.0.1:8000/readers/' + tracker + '/', function(data) {
 	  		console.log("uuid data - " + data + "tracker - " + tracker);
   			var items = [];
   			items.push("<div>" + data.name + "</div>");
@@ -271,14 +313,14 @@
 	  		}).appendTo(".content");
 	  		$("<div/>", {
 	  			"class": "content_element_button_delete_readers",
-	  		}).text("del").appendTo(".content_element_alone");
+	  		}).text("DELETE").appendTo(".content_element_alone");
 	  	});
 	  	makePatchFormReaders();		
 	}
 	function uuidauthorsLoad (tracker) {
 		clearItem(".content");
 		clearItem(".form_wrap");
-		$.get('http://127.0.0.1:8000/authors/' + tracker, function(data) {
+		$.get('http://127.0.0.1:8000/authors/' + tracker + '/', function(data) {
 	  		console.log("uuid data - " + data + "tracker - " + tracker);
   			var items = [];
 	  			items.push("<div>" + data.name + "</div>");
@@ -292,25 +334,32 @@
 	  		}).appendTo(".content");
 	  		$("<div/>", {
 	  			"class": "content_element_button_delete_authors",
-	  		}).text("del").appendTo(".content_element_alone");
+	  		}).text("DELETE").appendTo(".content_element_alone");
 	  	});
 	  	makePatchFormAuthors();		
 	}
 	function uuidbooksLoad (tracker) {
 		clearItem(".content");
 		clearItem(".form_wrap");
+		clearItem(".content_title");
+		$(".bookdetails").remove();
+		makeBooksTitleAlone();
 		$.get('http://127.0.0.1:8000/books/' + tracker, function(data) {
   			var items = [];
 			items.push("<div>" + data.title + "</div>");
 			items.push("<div id='uuidclass'>" + data.uuid + "</div>");
-			items.push("<div>" + data.title + "</div>");
+			if (data.reader_uuid == null) {
+				items.push("<div>avaliable</div>");
+			} else {
+				items.push("<div>not avaliable</div>");
+			}
 	  		$("<div/>", {
 	  			"class": "content_element_alone",
 	  			html: items.join("")
 	  		}).appendTo(".content");
 	  		$("<div/>", {
 	  			"class": "content_element_button_delete_books"
-	  		}).text("del").appendTo(".content_element_alone");
+	  		}).text("DELETE").appendTo(".content_element_alone");
 	  		var subitems = [];
 	  		$("<div/>", {
 	  			"class": "bookdetails",
@@ -361,20 +410,20 @@
 		$("<input/>", {
 			"type": "text",
 			"name": "name",
-			"onfocus": "this.value=''",
-			"value": "user name"
+			"id": "formName",
+			"placeholder": "user name"
 		}).appendTo("#patch_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "surname",
-			"onfocus": "this.value=''",
-			"value": "user surname"
+			"id": "formSurname",
+			"placeholder": "user surname"
 		}).appendTo("#patch_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "date_of_birth",
-			"onfocus": "this.value=''",
-			"value": "user birth date"
+			"id": "formDate",
+			"placeholder": "user birth date"
 		}).appendTo("#patch_form");
 		$("<button/>", {
 			"id": "submit_patch_readers",
@@ -382,6 +431,7 @@
 			"name": "submit",
 			"value": "submit"
 		}).text("edit").appendTo("#patch_form");
+		validateFormCall();
 	}
 	function makePatchFormBooks () {
 		clearItem("#form_wrap");
@@ -393,20 +443,20 @@
 		$("<input/>", {
 			"type": "text",
 			"name": "title",
-			"onfocus": "this.value=''",
-			"value": "title"
+			"id": "formTitle",
+			"placeholder": "title"
 		}).appendTo("#patch_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "author_uuid",
-			"onfocus": "this.value=''",
-			"value": "author uuid"
+			"id": "formAuthorUUID",
+			"placeholder": "author uuid"
 		}).appendTo("#patch_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "reader_uuid",
-			"onfocus": "this.value=''",
-			"value": "reader uuid"
+			"id": "formReaderUUID",
+			"placeholder": "reader uuid"
 		}).appendTo("#patch_form");
 		$("<button/>", {
 			"id": "submit_patch_books",
@@ -414,6 +464,7 @@
 			"name": "submit",
 			"value": "submit"
 		}).text("edit").appendTo("#patch_form");
+		validateFormCall();
 	}
 	function makePatchFormAuthors () {
 		clearItem("#form_wrap");
@@ -425,26 +476,26 @@
 		$("<input/>", {
 			"type": "text",
 			"name": "name",
-			"onfocus": "this.value=''",
-			"value": "user name"
+			"id": "formName",
+			"placeholder": "user name"
 		}).appendTo("#patch_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "surname",
-			"onfocus": "this.value=''",
-			"value": "user surname"
+			"id": "formSurname",
+			"placeholder": "user surname"
 		}).appendTo("#patch_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "date_of_birth",
-			"onfocus": "this.value=''",
-			"value": "user birth date"
+			"id": "formDate",
+			"placeholder": "user birth date"
 		}).appendTo("#patch_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "country",
-			"onfocus": "this.value=''",
-			"value": "author country"
+			"id": "formCountry",
+			"placeholder": "author country"
 		}).appendTo("#patch_form");
 		$("<button/>", {
 			"id": "submit_patch_authors",
@@ -452,6 +503,7 @@
 			"name": "submit",
 			"value": "submit"
 		}).text("edit").appendTo("#patch_form");
+		validateFormCall();
 	}
 
 
@@ -465,20 +517,20 @@
 		$("<input/>", {
 			"type": "text",
 			"name": "name",
-			"onfocus": "this.value=''",
-			"value": "user name"
+			"id": "formName",
+			"placeholder": "user name",
 		}).appendTo("#post_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "surname",
-			"onfocus": "this.value=''",
-			"value": "user surname"
+			"id": "formSurname",
+			"placeholder": "user surname",
 		}).appendTo("#post_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "date_of_birth",
-			"onfocus": "this.value=''",
-			"value": "user birth date"
+			"id": "formDate",
+			"placeholder": "user date of birth"
 		}).appendTo("#post_form");
 		$("<button/>", {
 			"id": "submit_post_readers",
@@ -486,6 +538,7 @@
 			"name": "submit",
 			"value": "submit"
 		}).text("add user").appendTo("#post_form");
+		validateFormCall();
 	}
 	function makePostFormBooks () {
 		clearItem("#form_wrap");
@@ -497,20 +550,20 @@
 		$("<input/>", {
 			"type": "text",
 			"name": "title",
-			"onfocus": "this.value=''",
-			"value": "title"
+			"id": "formTitle",
+			"placeholder": "title"
 		}).appendTo("#post_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "author_uuid",
-			"onfocus": "this.value=''",
-			"value": "author uuid"
+			"id": "formAuthorUUID",
+			"placeholder": "author uuid"
 		}).appendTo("#post_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "reader_uuid",
-			"onfocus": "this.value=''",
-			"value": "reader uuid"
+			"id": "formReaderUUID",
+			"placeholder": "reader uuid"
 		}).appendTo("#post_form");
 		$("<button/>", {
 			"id": "submit_post_books",
@@ -518,6 +571,7 @@
 			"name": "submit",
 			"value": "submit"
 		}).text("add book").appendTo("#post_form");
+		validateFormCall();
 	}
 	function makePostFormAuthors () {
 		clearItem("#form_wrap");
@@ -529,26 +583,26 @@
 		$("<input/>", {
 			"type": "text",
 			"name": "name",
-			"onfocus": "this.value=''",
-			"value": "author name"
+			"id": "formName",
+			"placeholder": "author name"
 		}).appendTo("#post_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "surname",
-			"onfocus": "this.value=''",
-			"value": "author surname"
+			"id": "formSurname",
+			"placeholder": "author surname"
 		}).appendTo("#post_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "date_of_birth",
-			"onfocus": "this.value=''",
-			"value": "author birth date"
+			"id": "formDate",
+			"placeholder": "author birth date"
 		}).appendTo("#post_form");
 		$("<input/>", {
 			"type": "text",
 			"name": "country",
-			"onfocus": "this.value=''",
-			"value": "author country"
+			"id": "formCountry",
+			"placeholder": "author country"
 		}).appendTo("#post_form");
 		$("<button/>", {
 			"id": "submit_post_authors",
@@ -556,6 +610,7 @@
 			"name": "submit",
 			"value": "submit"
 		}).text("add author").appendTo("#post_form");
+		validateFormCall();
 	}
 
 
@@ -774,8 +829,94 @@
 
 	$(document).ready(function() {
 		makeTitle();
+		jQuery.validator.addMethod("lettersonly", function(value, element) {
+			return this.optional(element) || /^[a-z\s]+$/i.test(value);
+		}, "Letters only allowed");
+		jQuery.validator.addMethod("uuidvalidate", function(value, element) {
+			return this.optional(element) || /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$/.test(value);
+		}, "Enter uuid or leave empty");
 	});
 
+	/* validation plugin*/
+	
+	function validateFormCall() {
+		$("#post_form").validate({
+			rules: {
+				name: {
+					required: true,
+					minlength: 2,
+					maxlength: 20,
+					lettersonly: true,
+				},
+				surname: {
+					required: true,
+					minlength: 2,
+					maxlength: 20,
+					lettersonly: true,
+				},
+				date_of_birth: {
+					required: true,
+					date: true
+				},
+				title: {
+					required: true,
+					minlength: 3,
+					maxlength: 50,
+					lettersonly: true,
+				},
+				author_uuid: {
+					uuidvalidate: true,
+				},
+				reader_uuid: {
+					uuidvalidate: true,
+				},
+				country: {
+					required: true,
+					minlength: 3,
+					maxlength: 20,
+					lettersonly: true,
+				}
+			}
+		});
+		$("#patch_form").validate({
+			rules: {
+				name: {
+					required: true,
+					minlength: 2,
+					maxlength: 20,
+					lettersonly: true,
+				},
+				surname: {
+					required: true,
+					minlength: 2,
+					maxlength: 20,
+					lettersonly: true,
+				},
+				date_of_birth: {
+					required: true,
+					date: true
+				},
+				title: {
+					required: true,
+					minlength: 3,
+					maxlength: 50,
+					lettersonly: true,
+				},
+				author_uuid: {
+					uuidvalidate: true,
+				},
+				reader_uuid: {
+					uuidvalidate: true,
+				},
+				country: {
+					required: true,
+					minlength: 3,
+					maxlength: 20,
+					lettersonly: true,
+				}
+			}
+		});
+	};
 
 </script>
 
